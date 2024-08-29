@@ -4,7 +4,7 @@ WORKDIR /MY-APP
 # Install the PostgreSQL development libraries
 RUN apk update && apk add --no-cache postgresql-dev gcc python3-dev musl-dev
 
-COPY . /MY-APP/
+COPY . .
 
 RUN pip install -r requirements.txt
 

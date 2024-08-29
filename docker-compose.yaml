@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: Flaskapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Sujith@1234
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+  flask-app:
+    build:
+      context: ./Flaskapp
+    ports:
+      - "5000:5000"
+    environment:
+      POSTGRES_DB: Flaskapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Sujith@1234
+      POSTGRES_HOST: db  # This should match the service name
+      POSTGRES_PORT: 5432
+    depends_on:
+      - db
+    networks:
+      - my-network
+      
+  react-app:
+    build:
+      context: ./my-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - flask-app
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+    driver: local
